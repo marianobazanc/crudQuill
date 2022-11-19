@@ -55,13 +55,13 @@ const Listado = ({ name, link }) => {
                         : `/edit/${trabajo._id}`
                     }
                   >
-                    <i className="fa-solid fa-pencil"></i>
+                    <i className="fa-solid fa-pencil text-primary"></i>
                   </Link>
                   <button
                     className="btn"
                     onClick={() => borrarTrabajo(trabajo._id)}
                   >
-                    <i className="fa-solid fa-trash"></i>
+                    <i className="fa-solid fa-trash text-danger"></i>
                   </button>
                 </td>
               </tr>

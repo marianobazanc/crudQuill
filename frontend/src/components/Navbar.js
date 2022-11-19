@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -29,7 +29,14 @@ const Navbar = () => {
           <Link className="navbar-brand" to="/inicio">
             RcyasociadosAPI
           </Link>
-          <Link className="nav-link text-light ms-2" to="/Datos">Datos</Link>
+
+          <ul className="d-flex gap-4 mb-0">
+            <li><NavLink className="nav-link text-light" to="/Trabajos">Trabajos</NavLink></li>
+            <li><NavLink className="nav-link text-light" to="/Cursos">Cursos</NavLink></li>
+            <li><NavLink className="nav-link text-light" to="/Noticias">Noticias</NavLink></li>
+            <li><NavLink className="nav-link text-light" to="/Datos">Datos</NavLink></li>
+          </ul>
+          
         </div>
         <div className="d-flex align-items-center text-light">
           <p className="m-0 text-uppercase">{dato && `${dato}`}</p>
