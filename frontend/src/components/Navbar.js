@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
+import swal from "@sweetalert/with-react"
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Navbar = () => {
     window.sessionStorage.removeItem("ApiToken");
     window.sessionStorage.removeItem("ApiUser");
     setDato("");
+    swal("Sesion finalizada", "", "success")
     setTimeout(() => {
       navigate("/login");
     }, 1000);
@@ -25,12 +27,12 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-dark bg-dark ">
       <div className="container-fluid">
-        <div className="d-flex align-items-center">
-          <Link className="navbar-brand" to="/inicio">
+        <div className="d-flex flex-column flex-lg-row align-items-center">
+          <Link className="navbar-brand" to="/">
             RcyasociadosAPI
           </Link>
 
-          <ul className="d-flex gap-4 mb-0">
+          <ul className="d-flex flex-column flex-lg-row gap-4 mb-0">
             <li><NavLink className="nav-link text-light" to="/Trabajos">Trabajos</NavLink></li>
             <li><NavLink className="nav-link text-light" to="/Cursos">Cursos</NavLink></li>
             <li><NavLink className="nav-link text-light" to="/Noticias">Noticias</NavLink></li>

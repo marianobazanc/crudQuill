@@ -3,6 +3,7 @@ import { useQuill } from "react-quilljs";
 import toolbar from "../../toolbar";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import swal from "@sweetalert/with-react"
 import "quill/dist/quill.snow.css";
 
 const Edit = () => {
@@ -37,7 +38,7 @@ const Edit = () => {
       const userLogged = loggedUserJson;
       setUser(userLogged);
     } else {
-      navigate("/login");
+      navigate("/");
     }
   }, []);
 
@@ -88,10 +89,12 @@ const Edit = () => {
             authToken: `${user}`,
           },
           body: JSON.stringify(data),
+        }).then(() => {
+          swal("Actualizado con exito", "", "success")
+          navigate("/Trabajos");
         });
-        navigate("/inicio");
       } catch (error) {
-        console.log(error);
+        swal("Error", `Algo ha sucedido: ${error}`, "error");
       }
     } else if (tipo === "curso") {
       try {
@@ -102,10 +105,12 @@ const Edit = () => {
             authToken: `${user}`,
           },
           body: JSON.stringify(data),
+        }).then(() => {
+          swal("Actualizado con exito", "", "success")
+          navigate("/Cursos");
         });
-        navigate("/inicio");
       } catch (error) {
-        console.log(error);
+        swal("Error", `Algo ha sucedido: ${error}`, "error");
       }
     }
   };

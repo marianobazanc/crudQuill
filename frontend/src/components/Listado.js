@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import swal from "@sweetalert/with-react"
 
 const Listado = ({ name, link }) => {
   const [trabajos, setTrabajos] = useState([]);
@@ -21,13 +22,26 @@ const Listado = ({ name, link }) => {
   };
 
   const borrarTrabajo = async (id) => {
-    await fetch(`${link}/${id}`, {
-      method: "DELETE",
-      headers: {
-        authToken: `${dato}`,
-      },
-    });
-    fetching();
+    swal({
+      title:"¿Borrar?",
+      text:"¿Estas seguro que deseas eliminar?",
+      icon:"warning",
+      buttons:true,
+      dangerMode:true,
+      })
+      .then(async(willDelete) => {
+        if(willDelete){
+          await fetch(`${link}/${id}`, {
+            method: "DELETE",
+            headers: {
+              authToken: `${dato}`,
+            },
+          }).then(() => {swal("Eliminado con exito", "", "success")});
+          fetching();
+        }else{
+          swal("No se ha eliminado ningun archivo")
+        }
+      })
   };
   return (
     <article className="">

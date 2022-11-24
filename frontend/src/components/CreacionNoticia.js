@@ -1,3 +1,4 @@
+import swal from "@sweetalert/with-react";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -42,11 +43,21 @@ const CreacionNoticia = () => {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+    const datos = {
+      titulo: e.target.titulo.value,
+      descripcoin: e.target.descripcion.value,
+      img: e.target.img.value,
+      link: e.target.link.value
+    }
     const data = {
         titulo: form.titulo,
         descripcion: form.descripcion,
         img: form.img,
         link: form.link
+    }
+    if(datos.titulo === "" || datos.descripcion === "" || datos.img === "" || datos.link === ""){
+      swal("Error", "Todos los campos son obligatorios", "error")
+      return
     }
     try {
         if(params.id){
@@ -58,6 +69,7 @@ const CreacionNoticia = () => {
                 },
                 body: JSON.stringify(data)
             })
+            swal("Noticia actualizada correctamente", "", "success")
 
         }else{
             await fetch("http://localhost:4001/api/noticias",{
@@ -68,12 +80,11 @@ const CreacionNoticia = () => {
                 },
                 body: JSON.stringify(data)
             })
-            alert("Formulario enviado correctamente")
+            swal("Noticia creada correctamente", "", "success")
         }
-        navigate("/inicio");
+        navigate("/Noticias");
     } catch (error) {
-        alert(`Error en el envio del formulario, revisar consola para mas informacion`)
-        console.log(error)
+        swal("Error", "Ocurrio un error inesperado. Intente de nuevo o mas tarde", "warning")
     }
   };
   return (

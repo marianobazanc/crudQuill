@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginService from "../../components/LoginService";
+import swal from "@sweetalert/with-react"
 
 const Register = () => {
   const [email, setEmail] = useState('')
@@ -11,6 +12,21 @@ const Register = () => {
 
   const handleSubmit = async(event) => {
     event.preventDefault()
+    const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    const datos = {
+      email: event.target.email.value,
+      contraseña: event.target.contraseña.value
+    }
+    if(datos.email === "" || datos.contraseña === ""){
+      swal("Error", "Todos los campos son obligatorios", "error")
+      return
+    }
+    if(!regexEmail.test(datos.email)){
+      swal("Error", "El email ingresado no es valido", "error")
+      return
+    }
+    swal("Cargando... Por favor espera")
+
     try {
       const user = await LoginService.login({
         email,
@@ -23,16 +39,21 @@ const Register = () => {
       window.sessionStorage.setItem(
         "ApiUser", user.data.name
       )
+      console.log("user: ",user)
       setUser(user)
+      if(user.error === null){
+        swal("Sesion iniciada", "", "success")
+      }
       setEmail("")
       setPassword("")
       setTimeout(() => {
-        navigate("/inicio")
+        navigate("/")
       }, 1000);
     } catch ({response}) {
       if(response !== 200){
         let errorMensaje = response.data.mensaje
         setError(errorMensaje)
+        swal("Error", `${errorMensaje}`, "error")
         setTimeout(() => {
           setError(null)
         }, 5000);
@@ -47,6 +68,7 @@ const Register = () => {
           <form className="form" onSubmit={handleSubmit} autoComplete="off">
             <input
               className="form-control my-1"
+              name="email"
               type="text"
               placeholder="Email"
               value={email}
@@ -54,6 +76,7 @@ const Register = () => {
             />
             <input
               className="form-control my-1"
+              name="contraseña"
               type="password"
               placeholder="Contraseña"
               value={password}

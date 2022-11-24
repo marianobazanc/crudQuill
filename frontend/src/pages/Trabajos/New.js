@@ -3,6 +3,7 @@ import { useQuill } from "react-quilljs";
 import toolbar from "../../toolbar";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import swal from "@sweetalert/with-react"
 import "quill/dist/quill.snow.css";
 
 function New() {
@@ -41,6 +42,16 @@ function New() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const datos = {
+      titulo: e.target.titulo.value,
+      ubicacion: e.target.ubicacion.value,
+      opciones: e.target.opciones.value
+    }
+
+    if(datos.titulo === "" || datos.ubicacion === ""){
+      swal("Error", "Todos los campos son obligatorios. Por favor rellenelos", "error")
+    }
+
     const data = {
       titulo,
       ubicacion,
@@ -57,8 +68,10 @@ function New() {
             authToken: `${user}`,
           },
           body: JSON.stringify(data),
+        }).then(() => {
+          swal("Curso creado con exito", "", "success")
+          navigate("/Cursos");
         });
-        navigate("/inicio");
       } else if (tipo === "trabajo") {
         await fetch("http://localhost:4001/api/trabajos", {
           method: "POST",
@@ -67,11 +80,13 @@ function New() {
             authToken: `${user}`,
           },
           body: JSON.stringify(data),
+        }).then(() => {
+          swal("Trabajo creado con exito", "", "success")
+          navigate("/Trabajos");
         });
-        navigate("/inicio");
       }
     } catch (error) {
-      console.log(error);
+      swal("Error", `Algo ha sucedido: ${error}`, "error")
     }
   };
   return (
@@ -87,6 +102,7 @@ function New() {
                 placeholder="Insertar titulo "
                 type="text"
                 id="value"
+                name="titulo"
                 value={titulo}
                 onChange={handleChange}
               />
@@ -97,6 +113,7 @@ function New() {
                 placeholder="Insertar ubicacion"
                 type="text"
                 id="value"
+                name="ubicacion"
                 value={ubicacion}
                 onChange={handleUbicacion}
               />
@@ -109,6 +126,7 @@ function New() {
             className="form-select mt-2"
             id="value"
             value={tipo}
+            name="opciones"
             onChange={handleTipo}
             aria-label="Default select example"
           >

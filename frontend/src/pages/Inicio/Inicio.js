@@ -1,7 +1,20 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import {useNavigate} from "react-router-dom"
 import Navbar from "../../components/Navbar"
 
 const Inicio = () => {
+  const navigate = useNavigate();
+  const [dato, setDato] = useState("");
+
+  useEffect(() => {
+    const loggedUserJson = window.sessionStorage.getItem("ApiUser");
+    if (loggedUserJson) {
+      const userLogged = loggedUserJson;
+      setDato(userLogged);
+    } else {
+      navigate("/login");
+    }
+  }, []);
   return (
     <div>
         <Navbar />
